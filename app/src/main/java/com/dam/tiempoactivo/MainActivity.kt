@@ -21,8 +21,7 @@ class MainActivity : ComponentActivity() {
     private val handler = Handler()
     private var millisecondTime: Long = 0
     private var updateTime = 0L
-    private var tiempo=" "
-    private lateinit var countDownTimer: CountDownTimer
+    private var tiempo = " "
     private var isRunning = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,56 +38,71 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-startTimer()
+        resetTimer()
+        startTimer()
     }
-
 
 
     override fun onRestart() {
         super.onRestart()
         Log.d("Estado", "estamose en restart")
-    }
 
 
-    fun startTimer() {
-        startTime = SystemClock.uptimeMillis()
-        handler.postDelayed(runnable, 0)
-    }
+        setContent {
 
-    fun pauseTimer() {
-        updateTime += millisecondTime
-        handler.removeCallbacks(runnable)
-    }
+                tiempoo(tiempo)
 
-    fun resetTimer() {
-        millisecondTime = 0L
-        startTime = 0L
-        updateTime = 0L
-        tiempo = "00:00:00"
-    }
 
-    private val runnable: Runnable = object : Runnable {
-
-        override fun run() {
-            millisecondTime = SystemClock.uptimeMillis() - startTime
-            var seconds = (millisecondTime / 1000).toInt()
-            var minutes = seconds / 60
-            val hours = minutes / 60
-            seconds %= 60
-            minutes %= 60
-            tiempo = String.format("%02d:%02d:%02d", hours, minutes, seconds)
-            handler.postDelayed(this, 0)
+        }
         }
 
 
-    }
-    override fun onPause() {
-        super.onPause()
+        fun startTimer() {
+            startTime = SystemClock.uptimeMillis()
+            handler.postDelayed(runnable, 0)
+        }
 
-        Log.d("Tiempo ejecutado", tiempo.toString())
-    }
-}
+        fun pauseTimer() {
+            updateTime += millisecondTime
+            handler.removeCallbacks(runnable)
+        }
 
+        fun resetTimer() {
+            millisecondTime = 0L
+            startTime = 0L
+            updateTime = 0L
+            tiempo = "00:00:00"
+        }
+
+        private val runnable: Runnable = object : Runnable {
+
+            override fun run() {
+                millisecondTime = SystemClock.uptimeMillis() - startTime
+                var seconds = (millisecondTime / 1000).toInt()
+                var minutes = seconds / 60
+                val hours = minutes / 60
+                seconds %= 60
+                minutes %= 60
+                tiempo = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+                handler.postDelayed(this, 0)
+            }
+
+
+        }
+
+        override fun onPause() {
+            super.onPause()
+
+            Log.d("Tiempo ejecutado", tiempo.toString())
+        }
+    }
+
+    @Composable
+    fun tiempoo(tiempo: String) {
+        Text(
+           text= (tiempo.toString())
+        )
+    }
 
     @Composable
     fun Greeting(name: String, modifier: Modifier = Modifier) {
@@ -105,3 +119,4 @@ startTimer()
             Greeting("Android")
         }
     }
+
